@@ -2,6 +2,7 @@ spring:
   application:
     name: dayone-financial
 
+# h2 설정
   h2:
     console:
       enabled: true
@@ -9,8 +10,11 @@ spring:
 
   jpa:
     hibernate:
+      # 자동으로 테이블 생성 # 개발 초기에만 사용
       ddl-auto: create
+      # id 생성 전략
       use-new-id-generator-mappings: false
+    # 원하는 의도대로 쿼리가 가는지 확인
     show-sql: true
     defer-datasource-initialization: true
 
@@ -19,15 +23,3 @@ spring:
     url: jdbc:h2:mem:dayone;DB_CLOSE_DELAY=-1
     username: sa
     password:
-
-  redis:
-    host: localhost
-    port: 6379
-
-  jwt:
-    secret: ZGF5b25lLXNwcmluZy1ib290LWRpdmlkZW5kLXByb2plY3QtdHV0b3JpYWwtand0LXNlY3JldC1rZXkK
-
-
-scheduler:
-  scrap:
-    yahoo: "0 0 0 * * *"
