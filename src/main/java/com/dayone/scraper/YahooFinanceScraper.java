@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class YahooFinanceScraper implements Scraper{
+public class YahooFinanceScraper implements Scraper {
 
     private static final String STATISTICS_URL =
             "https://finance.yahoo.com/quote/%s/history/?period1=%d&period2=%d&interval=1mo";
@@ -46,9 +46,9 @@ public class YahooFinanceScraper implements Scraper{
             Element tbody = tableEle.children().get(1);
 
             List<Dividend> dividends = new ArrayList<>();
-            for(Element e : tbody.children()){
+            for (Element e : tbody.children()) {
                 String txt = e.text();
-                if(!txt.endsWith("Dividend")) {
+                if (!txt.endsWith("Dividend")) {
                     continue;
                 }
 
@@ -58,18 +58,13 @@ public class YahooFinanceScraper implements Scraper{
                 int year = Integer.valueOf(splits[2]);
                 String dividend = splits[3];
 
-                if(month < 0) {
+                if (month < 0) {
                     throw new RuntimeException(
                             "Unexpected Month enum value -> " + splits[0]
                     );
                 }
 
-                dividends.add(
-                        Dividend.builder()
-                        .date(LocalDateTime.of(year, month, day, 0, 0))
-                        .dividend(dividend)
-                        .build()
-                );
+                dividends.add(new Dividend(LocalDateTime.of(year, month, day, 0, 0), dividend));
             }
             scrapedResult.setDividends(dividends);
         } catch (IOException e) {
@@ -80,7 +75,7 @@ public class YahooFinanceScraper implements Scraper{
     }
 
     @Override
-    public Company scrapCompanyByTicker (String ticker) {
+    public Company scrapCompanyByTicker(String ticker) {
         String url = String.format(SUMMARY_URL, ticker, ticker);
 
         try {
@@ -94,11 +89,8 @@ public class YahooFinanceScraper implements Scraper{
             System.out.println(title);
             //.split(" ")[0].trim()
 
-            return Company.builder()
-                    .ticker(ticker)
-                    .name(title)
-                    .build();
-        } catch (IOException e){
+            return new Company(ticker, title);
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
