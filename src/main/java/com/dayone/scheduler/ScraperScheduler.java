@@ -39,7 +39,8 @@ public class ScraperScheduler {
         // 회사마다 배당금 정보를 새로 스크래핑
         for (var company : companies) {
             log.info("scraping scheduler is started -> " + company.getName());
-            ScrapedResult scrapedResult = this.yahooFinanceScraper.scrap(new Company(company.getTicker(), company.getName()));
+            ScrapedResult scrapedResult = this.yahooFinanceScraper
+                    .scrap(new Company(company.getTicker(), company.getName()));
 
             // 스크래핑한 배당금 정보 중 데이터베이스에 없는 값은 저장
             scrapedResult.getDividends().stream()
@@ -47,7 +48,8 @@ public class ScraperScheduler {
                     .map(e -> new DividendEntity(company.getId(), e))
                     // 엘리먼트를 하나씩 디비든 레파지토리에 삽입
                     .forEach(e -> {
-                        boolean exists = this.dividendRepository.existsByCompanyIdAndDate(e.getCompanyId(), e.getDate());
+                        boolean exists = this.dividendRepository
+                                .existsByCompanyIdAndDate(e.getCompanyId(), e.getDate());
                         if (!exists) {
                             this.dividendRepository.save(e);
                         }

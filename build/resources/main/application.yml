@@ -2,7 +2,7 @@ spring:
   application:
     name: dayone-financial
 
-# h2 설정
+  # h2 설정
   h2:
     console:
       enabled: true

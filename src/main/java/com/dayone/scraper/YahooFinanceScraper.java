@@ -64,7 +64,9 @@ public class YahooFinanceScraper implements Scraper {
                     );
                 }
 
-                dividends.add(new Dividend(LocalDateTime.of(year, month, day, 0, 0), dividend));
+                dividends.add(new Dividend(LocalDateTime.of(
+                        year, month, day, 0, 0), dividend)
+                );
             }
             scrapedResult.setDividends(dividends);
         } catch (IOException e) {
