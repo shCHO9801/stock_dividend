@@ -41,9 +41,20 @@ public class YahooFinanceScraper implements Scraper {
             Document document = connection.get();
 
             Elements parseDivs = document.select("table.yf-h2urb6.noDl");
+
+            if(parseDivs.isEmpty()) {
+                System.out.println("Dividend data table not found!");
+                return scrapedResult;
+            }
+
             Element tableEle = parseDivs.get(0);  // table 전체
 
-            Element tbody = tableEle.children().get(1);
+            Element tbody = tableEle.children().size() > 1 ? tableEle.children().get(1) : null;
+
+            if(tbody == null) {
+                System.out.println("Table body not found!");
+                return scrapedResult;
+            }
 
             List<Dividend> dividends = new ArrayList<>();
             for (Element e : tbody.children()) {
