@@ -4,6 +4,7 @@ import com.dayone.model.Company;
 import com.dayone.model.Dividend;
 import com.dayone.model.ScrapedResult;
 import com.dayone.model.constants.Month;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class YahooFinanceScraper implements Scraper {
 
@@ -26,6 +28,7 @@ public class YahooFinanceScraper implements Scraper {
 
     @Override
     public ScrapedResult scrap(Company company) {
+        log.info("Scraper: Start to scrape dividends for company -> {} ({})", company.getName(), company.getTicker());
         var scrapedResult = new ScrapedResult();
         scrapedResult.setCompany(company);
 
@@ -40,10 +43,10 @@ public class YahooFinanceScraper implements Scraper {
                     .timeout(10000);
             Document document = connection.get();
 
-            Elements parseDivs = document.select("table.yf-h2urb6.noDl");
+            Elements parseDivs = document.select("table.yf-j5d1ld.noDl");
 
             if(parseDivs.isEmpty()) {
-                System.out.println("Dividend data table not found!");
+                log.warn("Scraper: No dividends found");
                 return scrapedResult;
             }
 
@@ -52,7 +55,7 @@ public class YahooFinanceScraper implements Scraper {
             Element tbody = tableEle.children().size() > 1 ? tableEle.children().get(1) : null;
 
             if(tbody == null) {
-                System.out.println("Table body not found!");
+                log.warn("Scraper: Table body not found");
                 return scrapedResult;
             }
 
@@ -84,6 +87,7 @@ public class YahooFinanceScraper implements Scraper {
             // TODO
             e.printStackTrace();
         }
+        log.info("Scraper: End to scrape dividends for company -> {} ({})", company.getName(), company.getTicker());
         return scrapedResult;
     }
 

@@ -32,8 +32,9 @@ public class ScraperScheduler {
     @CacheEvict(value = CacheKey.KEY_FINANCE, allEntries = true)
     @Scheduled(cron = "${scheduler.scrap.yahoo}")
     public void yahooFinanceScheduling() {
-        // log.info("scraping scheduler is started");
+        log.info("scraping scheduler is started");
         // 저장된 회사 목록을 조회
+
         List<CompanyEntity> companies = this.companyRepository.findAll();
 
         // 회사마다 배당금 정보를 새로 스크래핑
@@ -52,6 +53,7 @@ public class ScraperScheduler {
                                 .existsByCompanyIdAndDate(e.getCompanyId(), e.getDate());
                         if (!exists) {
                             this.dividendRepository.save(e);
+                            log.info("insert new dividend -> " + e.toString());
                         }
                     });
 
@@ -62,5 +64,6 @@ public class ScraperScheduler {
                 Thread.currentThread().interrupt();
             }
         }
+        log.info("ScraperScheduler: yahooFinanceScheduling is finished");
     }
 }
