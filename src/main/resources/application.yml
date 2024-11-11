@@ -2,7 +2,6 @@ spring:
   application:
     name: dayone-financial
 
-  # h2 설정
   h2:
     console:
       enabled: true
@@ -10,11 +9,8 @@ spring:
 
   jpa:
     hibernate:
-      # 자동으로 테이블 생성 # 개발 초기에만 사용
       ddl-auto: create
-      # id 생성 전략
       use-new-id-generator-mappings: false
-    # 원하는 의도대로 쿼리가 가는지 확인
     show-sql: true
     defer-datasource-initialization: true
 

@@ -20,20 +20,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TokenProvider {
 
-    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1hour
+    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60;
     private static final String KEY_ROLES = "roles";
 
     private final MemberService memberService;
 
     @Value("{spring.jwt.secret}")
     private String secretKey;
-
-    /*
-    * 토큰 생성 (발급)
-    * @param username
-    * @param roles
-    * @return
-    */
 
     public String generateToken(String username, List<String> roles) {
         Claims claims = Jwts.claims().setSubject(username);
@@ -46,13 +39,14 @@ public class TokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expiredDate)
-                .signWith(SignatureAlgorithm.HS512, this.secretKey) // 사용할 암호화 알고리즘, 비밀키
+                .signWith(SignatureAlgorithm.HS512, this.secretKey)
                 .compact();
     }
 
     public Authentication getAuthentication(String jwt) {
         UserDetails userDetails = this.memberService.loadUserByUsername(this.getUsername(jwt));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails,
+                "", userDetails.getAuthorities());
     }
 
     public String getUsername(String token) {
@@ -60,7 +54,7 @@ public class TokenProvider {
     }
 
     public boolean validateToken(String token) {
-        if(!StringUtils.hasText(token)) return false;
+        if (!StringUtils.hasText(token)) return false;
 
         var claims = this.parseClaims(token);
         return !claims.getExpiration().before(new Date());
@@ -72,7 +66,6 @@ public class TokenProvider {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            // TODO
             return e.getClaims();
         }
     }

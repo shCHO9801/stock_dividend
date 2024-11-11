@@ -14,7 +14,7 @@ public class ScrapedResult {
 
     private List<Dividend> dividends;
 
-    public ScrapedResult(){
+    public ScrapedResult() {
         this.dividends = new ArrayList<>();
     }
 }

@@ -63,7 +63,8 @@ public class CompanyService {
 
     public List<String> getCompanyNamesByKeyword(String keyword) {
         Pageable limit = PageRequest.of(0, 10);
-        Page<CompanyEntity> companyEntities = this.companyRepository.findByNameStartingWithIgnoreCase(keyword, limit);
+        Page<CompanyEntity> companyEntities =
+                this.companyRepository.findByNameStartingWithIgnoreCase(keyword, limit);
         return companyEntities
                 .stream()
                 .map(e -> e.getName())
@@ -72,12 +73,6 @@ public class CompanyService {
 
     public void addAutoCompleteKeyWord(String keyword) {
         this.trie.put(keyword, null);
-    }
-
-    public List<String> autoComplete(String keyword) {
-        return (List<String>) this.trie.prefixMap(keyword).keySet()
-                .stream().
-                collect(Collectors.toList());
     }
 
     public void deleteAutoCompleteKeyWord(String keyword) {

@@ -28,7 +28,7 @@ public class MemberService implements UserDetailsService {
 
     public MemberEntity register(Auth.SignUp member) {
         boolean exists = this.memberRepository.existsByUsername(member.getUsername());
-        if(exists) {
+        if (exists) {
             throw new AlreadyExistUserException();
         }
 

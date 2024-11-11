@@ -28,9 +28,6 @@ public class CompanyController {
         var result = this.companyService.getCompanyNamesByKeyword(keyword);
         return ResponseEntity.ok(result);
     }
-    /*
-    * 전체 회사 조회
-    */
 
     @GetMapping
     @PreAuthorize("hasRole('READ')")
@@ -40,12 +37,6 @@ public class CompanyController {
         log.info("CompanyController: Search Company Complete");
         return ResponseEntity.ok(companies);
     }
-
-    /*
-     * 회사 및 배당금 정보 추가
-     * @Param request
-     * @return
-     */
 
     @PostMapping
     @PreAuthorize("hasRole('WRITE')")
@@ -68,7 +59,6 @@ public class CompanyController {
     public ResponseEntity<?> deleteCompany(@PathVariable String ticker) {
         log.info("CompanyController: Delete Company started with -> {}", ticker);
         String companyName = this.companyService.deleteCompany(ticker);
-        // 캐시에서도 삭제
         this.clearFinanceCache(companyName);
         log.info("CompanyController: Delete Company completed");
         return ResponseEntity.ok(companyName);

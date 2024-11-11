@@ -45,16 +45,16 @@ public class YahooFinanceScraper implements Scraper {
 
             Elements parseDivs = document.select("table.yf-j5d1ld.noDl");
 
-            if(parseDivs.isEmpty()) {
+            if (parseDivs.isEmpty()) {
                 log.warn("Scraper: No dividends found");
                 return scrapedResult;
             }
 
-            Element tableEle = parseDivs.get(0);  // table 전체
+            Element tableEle = parseDivs.get(0);
 
             Element tbody = tableEle.children().size() > 1 ? tableEle.children().get(1) : null;
 
-            if(tbody == null) {
+            if (tbody == null) {
                 log.warn("Scraper: Table body not found");
                 return scrapedResult;
             }
@@ -104,7 +104,6 @@ public class YahooFinanceScraper implements Scraper {
             Element titleEle = document.select("h1").get(1);
             String title = titleEle.text().split("\\(")[0].trim();
             System.out.println(title);
-            //.split(" ")[0].trim()
 
             return new Company(ticker, title);
         } catch (IOException e) {
